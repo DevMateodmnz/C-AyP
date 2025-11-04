@@ -61,11 +61,10 @@ struct Traduccion diccionario[] = {
     {"ir_a", "goto"},
 };
 
-    };
     int num_traducciones = sizeof(diccionario) / sizeof(diccionario[0]);
 
-    entrada = fopen("archivo_es.c", "r");
-    salida = fopen("programa_en.c", "w");
+    entrada = fopen("archivo-es.c", "r");
+    salida = fopen("programa-en.c", "w");
 
     if (!entrada || !salida) {
         printf("Error al abrir archivos.\n");
