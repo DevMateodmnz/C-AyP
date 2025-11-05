@@ -1,3 +1,4 @@
+/*
 # El programa lee línea por línea un archivo llamado archivo-es.c.
 
 # En cada línea, busca palabras definidas en el diccionario de traducciones.
@@ -6,7 +7,7 @@
 
 # Escribe la línea traducida en un nuevo archivo llamado programa-en.c.
 
-# Al finalizar, muestra el mensaje “Traducción completada con éxito.”
+# Al finalizar, muestra el mensaje “Traducción completada con éxito.” */
 
 #include <stdio.h>
 #include <string.h>
