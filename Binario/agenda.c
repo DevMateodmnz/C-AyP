@@ -11,6 +11,10 @@ Desarrollar un programa en C que funcione como una agenda de contactos, permitie
 #include <string.h>
 
 #define MAX_CONTACTOS 100
+// 🔹 Se usa una constante simbólica con #define para definir el tamaño máximo.
+//   Esto permite cambiar fácilmente la capacidad sin modificar múltiples líneas de código.
+//   Además evita usar memoria dinámica, lo que simplifica el manejo de datos.
+
 
 // Estructura base para los contactos
 struct Contacto {
@@ -18,8 +22,14 @@ struct Contacto {
     char telefono[20];
     int dni;
 };
+// 🔹 Se agrupan los datos relacionados en una estructura, facilitando la manipulación.
+// 🔹 El DNI se usa como identificador único, lo que permite búsquedas precisas y evita duplicados.
+// 🔹 El uso de arrays fijos de char evita el uso de memoria dinámica (malloc), reduciendo errores comunes.
+
 
 // Prototipos de funciones
+// 🔹 Los prototipos informan al compilador qué funciones existen antes de main().
+//   Esto es buena práctica y permite organizar el código mejor.
 void agregarContacto(struct Contacto agenda[], int *cantidad);
 void eliminarContacto(struct Contacto agenda[], int *cantidad);
 void eliminarTodos(struct Contacto agenda[], int *cantidad);
@@ -27,10 +37,11 @@ void ordenarContactos(struct Contacto agenda[], int cantidad);
 void buscarContacto(struct Contacto agenda[], int cantidad);
 void mostrarContactos(struct Contacto agenda[], int cantidad);
 
+
 // Función principal
 int main() {
-    struct Contacto agenda[MAX_CONTACTOS];
-    int cantidad = 0;
+    struct Contacto agenda[MAX_CONTACTOS]; // 🔹 Se declara el array de estructuras.
+    int cantidad = 0;                      // 🔹 Contador de contactos actuales.
     int opcion;
 
     do {
@@ -45,6 +56,8 @@ int main() {
         printf("Seleccione una opción: ");
         scanf("%d", &opcion);
         getchar(); // limpia el buffer del salto de línea
+        // 🔹 Se usa getchar() para eliminar el salto de línea que deja scanf, 
+        //   evitando que interfiera con futuras lecturas con fgets.
 
         switch(opcion) {
             case 1: agregarContacto(agenda, &cantidad); break;
@@ -56,11 +69,14 @@ int main() {
             case 0: printf("Saliendo del programa...\n"); break;
             default: printf("Opción inválida. Intente de nuevo.\n");
         }
+        // 🔹 Se usa un switch para controlar el flujo principal. 
+        //   Es más claro y escalable que usar múltiples if/else.
 
     } while(opcion != 0);
 
     return 0;
 }
+
 
 // FUNCIONES PRINCIPALES
 
@@ -75,6 +91,7 @@ void agregarContacto(struct Contacto agenda[], int *cantidad) {
     printf("Ingrese nombre: ");
     fgets(nuevo.nombre, sizeof(nuevo.nombre), stdin);
     nuevo.nombre[strcspn(nuevo.nombre, "\n")] = 0; // eliminar salto de línea
+    // 🔹 strcspn busca el primer '\n' y lo reemplaza por '\0'. Esto evita errores de formato al mostrar.
 
     printf("Ingrese teléfono: ");
     fgets(nuevo.telefono, sizeof(nuevo.telefono), stdin);
@@ -91,12 +108,15 @@ void agregarContacto(struct Contacto agenda[], int *cantidad) {
             return;
         }
     }
+    // 🔹 Se valida la unicidad del contacto por DNI, lo que evita duplicados.
+    // 🔹 Esta comprobación se hace linealmente (O(n)), lo que está bien para pocos contactos.
 
     agenda[*cantidad] = nuevo;
     (*cantidad)++;
 
     printf("Contacto agregado con éxito.\n");
 }
+
 
 void mostrarContactos(struct Contacto agenda[], int cantidad) {
     if (cantidad == 0) {
@@ -108,7 +128,10 @@ void mostrarContactos(struct Contacto agenda[], int cantidad) {
     for (int i = 0; i < cantidad; i++) {
         printf("%d. %s | Tel: %s | DNI: %d\n", i + 1, agenda[i].nombre, agenda[i].telefono, agenda[i].dni);
     }
+    // 🔹 Muestra todos los contactos con formato claro.
+    // 🔹 Se usa un índice desde 1 para que sea más amigable al usuario.
 }
+
 
 void buscarContacto(struct Contacto agenda[], int cantidad) {
     if (cantidad == 0) {
@@ -154,7 +177,10 @@ void buscarContacto(struct Contacto agenda[], int cantidad) {
     } else {
         printf("Opción inválida.\n");
     }
+    // 🔹 La búsqueda por nombre es exacta (sensible a mayúsculas/minúsculas).
+    // 🔹 Se podría mejorar usando strcasecmp() o strstr() para búsquedas parciales.
 }
+
 
 void ordenarContactos(struct Contacto agenda[], int cantidad) {
     if (cantidad == 0) {
@@ -194,7 +220,11 @@ void ordenarContactos(struct Contacto agenda[], int cantidad) {
     } else {
         printf("Opción inválida.\n");
     }
+    // 🔹 Implementa una versión simple de ordenamiento burbuja (O(n²)).
+    // 🔹 Es suficiente para listas pequeñas, pero ineficiente para muchas entradas.
+    // 🔹 Se podría mejorar con qsort() y una función de comparación.
 }
+
 
 void eliminarContacto(struct Contacto agenda[], int *cantidad) {
     if (*cantidad == 0) {
@@ -226,7 +256,10 @@ void eliminarContacto(struct Contacto agenda[], int *cantidad) {
 
     (*cantidad)--;
     printf("Contacto eliminado con éxito.\n");
+    // 🔹 Esta eliminación mantiene la lista compacta.
+    // 🔹 Costo O(n), pero simple y efectivo para listas pequeñas.
 }
+
 
 void eliminarTodos(struct Contacto agenda[], int *cantidad) {
     if (*cantidad == 0) {
@@ -236,4 +269,6 @@ void eliminarTodos(struct Contacto agenda[], int *cantidad) {
 
     *cantidad = 0;
     printf("Todos los contactos fueron eliminados.\n");
+    // 🔹 Simplemente se pone cantidad = 0.
+    //   No hace falta limpiar memoria porque los datos están en un array local (no dinámico).
 }
